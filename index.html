@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Escolares</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Protection contre le cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body class="no-select theme-glassmorphism">
+    <!-- Overlay de protection -->
+    <div id="protection-overlay"></div>
+    
+    <!-- Écran de connexion -->
+    <div id="login-screen" class="login-screen animate-in">
+        <div class="login-card">
+            <h2 class="login-title" id="login-title">Acceso a Horarios</h2>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="text" 
+                           class="form-control" 
+                           id="full-name"
+                           placeholder="Nombre completo (ej: Juan Pérez García)"
+                           required>
+                </div>
+                <div class="form-group">
+                    <input type="password" 
+                           class="form-control" 
+                           id="password"
+                           placeholder="Contraseña"
+                           required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    Iniciar Sesión
+                </button>
+            </form>
+            <div style="margin-top: 20px; text-align: center; font-size: 0.9rem;">
+                <select id="language-login" class="language-selector">
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div id="main-app" class="container animate-in" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">📚 <span id="app-title">Horarios Escolares</span></div>
+            <div class="controls">
+                <select id="theme-selector" class="theme-selector">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="hacker">Hacker</option>
+                    <option value="gold">Gold</option>
+                    <option value="monochrome">Monochrome</option>
+                    <option value="neon-blue">Néon Blue</option>
+                    <option value="glassmorphism">Glassmorphism</option>
+                </select>
+                <select id="language-selector" class="language-selector">
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                </select>
+                <button class="btn logout-btn" id="logout-btn">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <!-- Horaires des cours -->
+        <div class="schedule-container">
+            <h2 class="schedule-title" id="class-schedule-title">Horario de Clases</h2>
+            <div class="table-wrapper">
+                <table id="class-table">
+                    <thead>
+                        <tr>
+                            <th id="subject-header">Materia</th>
+                            <th id="monday-header">Lunes</th>
+                            <th id="tuesday-header">Martes</th>
+                            <th id="wednesday-header">Miércoles</th>
+                            <th id="thursday-header">Jueves</th>
+                            <th id="friday-header">Viernes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1° Matière</strong></td>
+                            <td>Mathématiques</td>
+                            <td>Français</td>
+                            <td>Mathématiques</td>
+                            <td>Français</td>
+                            <td>Mathématiques</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2° Matière</strong></td>
+                            <td>Sciences</td>
+                            <td>Histoire</td>
+                            <td>Sciences</td>
+                            <td>Histoire</td>
+                            <td>Éducation Civique</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3° Matière</strong></td>
+                            <td>Anglais</td>
+                            <td>Géographie</td>
+                            <td>Anglais</td>
+                            <td>Géographie</td>
+                            <td>Arts</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4° Matière</strong></td>
+                            <td>Éducation Physique</td>
+                            <td>Musique</td>
+                            <td>Éducation Physique</td>
+                            <td>Musique</td>
+                            <td>Libre</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Horaires des pauses -->
+        <div class="schedule-container">
+            <h2 class="schedule-title" id="break-schedule-title">Horarios de Recreos, Almuerzo e Idas al Baño</h2>
+            <div class="table-wrapper">
+                <table id="break-table">
+                    <thead>
+                        <tr>
+                            <th id="grades-header">Cursos</th>
+                            <th id="recess1st-header">Hora Recreo 1er Tiempo y Cafetería</th>
+                            <th id="bathroom1st-header">Ida al Baño 1er Tiempo</th>
+                            <th id="lunch-header">Almuerzo</th>
+                            <th id="recess2nd-header">2do Tiempo Cafetería</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>De 8 y 4° a 9 am en el baño nivel inicial</strong></td>
+                            <td>8:40 - 9:00 am</td>
+                            <td>8:40 - 9:00 am</td>
+                            <td>11:30 - 11:50 am<br>Migin los ira buscando curso por curso solo los que van a comprar los demás se quedan en sus curso.</td>
+                            <td>11:30 am - 12:00 pm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1°, 2° y 3° GRADO</strong></td>
+                            <td>8:00 - 8:20 am</td>
+                            <td>8:40 - 9:00 am</td>
+                            <td>11:30 - 11:50 am<br>Solo los que almuerzan. Los demás se quedan con sus maestros en el curso.</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4° y 5°</strong></td>
+                            <td>8:10 - 8:20 am</td>
+                            <td>4:00 - 9:00 am</td>
+                            <td>11:50 - 12:10 pm<br>Solo los que almuerzan los demás se quedan con sus maestros en el curso.</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5° y 6°</strong></td>
+                            <td>8:20 - 8:30 am</td>
+                            <td>5:00 - 9:10 am</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1° de Secundaria y 2do de Secundaria</strong></td>
+                            <td>8:30 - 8:40 am</td>
+                            <td>6:00 - 9:20 am</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3° de Secundaria y 4° de Secundaria y 5° sec</strong></td>
+                            <td>8:40 - 8:50 am</td>
+                            <td>1° SEC. 9:30</td>
+                            <td>Fin de los Almuerzos</td>
+                            <td>Fin de asistencia a las cafeterías</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nivel Inicial. 11 y 30 Asistentes Buscan la Comidas</strong></td>
+                            <td>-</td>
+                            <td>3° SEC. 9:40</td>
+                            <td>11:30 Primer Ciclo Nivel primario. 1°, 2° y 3° Migin llevara las Comidas.</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><span id="created-by">Creado por</span> <a href="https://badley08.github.io/Karlito" target="_blank">Karlito</a></p>
+            <div class="preview-container">
+                <iframe src="https://badley08.github.io/Karlito" width="100%" height="300" frameborder="0" style="border-radius: 10px; margin-top: 10px;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
