@@ -6,7 +6,133 @@
   <title>Horarios Escolares | Karlito</title>
   <meta name="description" content="Horarios escolares con protección visual y anti-debug.">
   <meta name="author" content="Karlito">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+    .hidden { display: none; }
+
+    canvas#watermark {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: none;
+    }
+
+    section {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      overflow-x: auto;
+    }
+    h1,h2 { margin-bottom: 12px; }
+    button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: none;
+      background: #667eea;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover { background: #5766d3; }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-overflow: ellipsis;
+    }
+    th { text-align: left; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #sudo {
+      background: #ff4081;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-left: 10px;
+    }
+    #toast {
+      position: fixed;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      padding: 8px 16px;
+      border-radius: 6px;
+      display: none;
+      z-index: 10000;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo svg {
+      width: 40px; height: 40px;
+    }
+    .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Portfolio link */
+    .portfolio-link {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: linear-gradient(90deg,#ff9800,#ff5722);
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-decoration: none;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .portfolio-link:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
 
@@ -17,20 +143,35 @@
   <!-- Login -->
   <section id="login">
     <div class="card">
-      <h1>Acceso a Horarios</h1>
-      <form id="login-form">
-        <input type="text" id="name" placeholder="Nombre completo" required />
-        <button type="submit">Entrar</button>
-      </form>
-      <p class="note">Introduce tu nombre para acceder</p>
+      <div class="logo">
+        <svg viewBox="0 0 100 100">
+          <rect rx="18" ry="18" width="100" height="100" fill="url(#grad)"/>
+          <defs>
+            <linearGradient id="grad" x1="0" x2="1">
+              <stop offset="0%" stop-color="#667eea"/>
+              <stop offset="100%" stop-color="#764ba2"/>
+            </linearGradient>
+          </defs>
+          <text x="50" y="58" text-anchor="middle" font-size="42" fill="#fff" font-weight="bold">K</text>
+        </svg>
+        <span>Horarios Escolares</span>
+      </div>
+      <button id="enter">Entrar</button>
+      <p class="note">Acceso directo a los horarios</p>
     </div>
   </section>
 
   <!-- Main -->
   <section id="app" class="hidden">
     <header>
-      <h1 id="title">Horarios Escolares</h1>
-      <span id="sudo" class="hidden"># sudo</span>
+      <div class="logo">
+        <svg viewBox="0 0 100 100">
+          <rect rx="18" ry="18" width="100" height="100" fill="url(#grad)"/>
+          <text x="50" y="58" text-anchor="middle" font-size="42" fill="#fff" font-weight="bold">K</text>
+        </svg>
+        <h1 id="title">Horarios Escolares</h1>
+        <span id="sudo" class="hidden"># sudo</span>
+      </div>
       <button id="logout">Cerrar Sesión</button>
     </header>
 
@@ -77,11 +218,96 @@
           </tbody>
         </table>
       </div>
+
+      <a class="portfolio-link" href="https://badley08.github.io/Karlito" target="_blank">✨ Visita mi Portfolio ✨</a>
     </main>
   </section>
 
   <div id="toast"></div>
 
-  <script src="script.js"></script>
+  <script>
+    const login = document.getElementById("login");
+    const app = document.getElementById("app");
+    const sudoBadge = document.getElementById("sudo");
+    const logoutBtn = document.getElementById("logout");
+    const enterBtn = document.getElementById("enter");
+    const toast = document.getElementById("toast");
+    const overlay = document.getElementById("overlay");
+    const canvas = document.getElementById("watermark");
+    const ctx = canvas.getContext("2d");
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 2000);
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    function drawWatermark(text) {
+      resizeCanvas();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = "bold 18px Arial";
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
+      for (let y = 40; y < canvas.height; y += 80) {
+        for (let x = 20; x < canvas.width; x += 220) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(-0.35);
+          ctx.fillText(text, 0, 0);
+          ctx.restore();
+        }
+      }
+    }
+
+    // Entrar sin usuario (direct)
+    enterBtn.addEventListener("click", () => {
+      login.classList.add("hidden");
+      app.classList.remove("hidden");
+      sudoBadge.classList.remove("hidden"); // tu es toujours sudo ici
+      showToast("Modo sudo activado ⚡");
+      drawWatermark("Karlito [sudo]");
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      app.classList.add("hidden");
+      login.classList.remove("hidden");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // Anti clic derecho
+    document.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      showToast("Clic derecho no permitido");
+    });
+
+    // Anti debug
+    let devtoolsOpen = false;
+    setInterval(() => {
+      const threshold = 160;
+      if (
+        window.outerWidth - window.innerWidth > threshold ||
+        window.outerHeight - window.innerHeight > threshold
+      ) {
+        if (!devtoolsOpen) {
+          devtoolsOpen = true;
+          overlay.style.display = "block";
+          showToast("Depuración detectada");
+        }
+      } else {
+        if (devtoolsOpen) {
+          devtoolsOpen = false;
+          overlay.style.display = "none";
+          showToast("Depuración cerrada");
+        }
+      }
+    }, 1000);
+
+    window.addEventListener("resize", () => {
+      drawWatermark("Karlito [sudo]");
+    });
+  </script>
 </body>
 </html>
