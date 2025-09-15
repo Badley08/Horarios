@@ -1,293 +1,85 @@
-/* === Reset global === */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  font-family: "Poppins", Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: #fff;
-  overflow-x: hidden;
-}
-
-/* Désactiver la sélection */
-.no-select {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-
-/* === Logo & Branding === */
-.logo-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  gap: 12px;
-}
-
-.brand-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-sub {
-  font-size: 0.9rem;
-  opacity: 0.75;
-}
-
-/* === Login Screen === */
-.login-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  padding: 20px;
-}
-
-.login-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  border-radius: 18px;
-  padding: 36px;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-  text-align: center;
-  animation: fadeInUp 0.7s ease forwards;
-}
-
-.login-title {
-  margin-bottom: 24px;
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: 0.95rem;
-}
-
-.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.btn {
-  border: none;
-  border-radius: 10px;
-  padding: 12px 18px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: transform 0.25s, background 0.25s;
-}
-
-.btn-primary {
-  width: 100%;
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  color: #fff;
-}
-
-.btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(45deg, #5a67d8, #6b46c1);
-}
-
-/* Error message */
-.error-message {
-  background: rgba(255, 0, 0, 0.2);
-  color: #ffaaaa;
-  padding: 8px;
-  margin-bottom: 14px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-}
-
-/* === Header === */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px;
-  margin-bottom: 20px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(14px);
-  animation: fadeIn 1s ease forwards;
-}
-
-.brand-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
 }
+.hidden { display: none; }
 
-.app-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.app-sub {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-.sudo-badge {
-  background: #111;
-  color: #0f0;
-  font-family: monospace;
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 8px;
-  margin-left: 12px;
-  box-shadow: 0 0 6px rgba(0,255,0,0.6);
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.theme-selector {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.logout-btn {
-  background: #ff5c5c;
-  color: #fff;
-}
-
-/* === Tables === */
-.schedule-area {
-  padding: 20px;
-}
-
-.schedule-container {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 20px;
-  border-radius: 14px;
-  margin-bottom: 24px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-}
-
-.schedule-title {
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 1.2rem;
-}
-
-.table-wrapper {
-  overflow-x: auto;
-  perspective: 1000px;
-}
-
-.fancy-table {
-  width: 100%;
-  border-collapse: collapse;
-  transform-style: preserve-3d;
-  transition: transform 0.4s ease;
-}
-
-.fancy-table:hover {
-  transform: rotateX(6deg) rotateY(6deg);
-}
-
-th, td {
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-  font-size: 0.95rem;
-}
-
-th {
-  background: rgba(255, 255, 255, 0.2);
-  font-weight: 600;
-}
-
-/* === Footer === */
-.footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  margin: 20px;
-}
-
-/* === Animations === */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* === Watermark & Overlay === */
-#watermark-canvas {
+canvas#watermark {
   position: fixed;
-  inset: 0;
-  z-index: 9998;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
-  opacity: 0.12;
+  z-index: 1;
 }
 
-#protection-overlay {
+#overlay {
   position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(0,0,0,0.65);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
   backdrop-filter: blur(6px);
+  z-index: 9999;
   display: none;
 }
 
-#protection-overlay.active {
-  display: block;
+section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
 }
-
-/* === Toast Notification === */
-#toast-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 10000;
+.card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
-
-#toast-container div {
-  margin-top: 8px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: rgba(0,0,0,0.7);
+h1,h2 { margin-bottom: 12px; }
+form { display: flex; gap: 10px; }
+input, button {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+}
+input { flex: 1; }
+button {
+  background: #667eea;
   color: #fff;
-  font-size: 0.85rem;
-  animation: fadeIn 0.3s ease;
+  cursor: pointer;
+}
+button:hover { background: #5766d3; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+th { text-align: left; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+#sudo {
+  background: #ff4081;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-left: 10px;
+}
+#toast {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: none;
 }
