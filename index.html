@@ -3,185 +3,85 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Horarios Escolares Seguros | Karlito</title>
-  <meta name="description" content="Consulta tus horarios escolares protegidos con watermark dinámico. Creado por Karlito.">
-  <meta name="keywords" content="horarios escolares, clases, recreos, almuerzo, baño, Karlito">
+  <title>Horarios Escolares | Karlito</title>
+  <meta name="description" content="Horarios escolares con protección visual y anti-debug.">
   <meta name="author" content="Karlito">
-  <!-- OpenGraph basique -->
-  <meta property="og:title" content="Horarios Escolares — Seguros">
-  <meta property="og:description" content="Sistema de horarios escolares con protección visual." />
-  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="styles.css">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
 </head>
-<body class="no-select theme-glassmorphism">
+<body>
 
-  <!-- watermark canvas -->
-  <canvas id="watermark-canvas" aria-hidden="true"></canvas>
-  <div id="protection-overlay" class="hidden" aria-hidden="true"></div>
-  <div id="toast-container" aria-live="polite"></div>
+  <!-- Watermark -->
+  <canvas id="watermark"></canvas>
+  <div id="overlay"></div>
 
-  <!-- LOGIN (sans aucun indice de mot de passe) -->
-  <div id="login-screen" class="login-screen animate-in">
-    <div class="login-card">
-      <div class="logo-row">
-        <svg id="site-logo" viewBox="0 0 100 100" width="56" height="56" aria-hidden="true">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1">
-              <stop offset="0" stop-color="#667eea"/>
-              <stop offset="1" stop-color="#764ba2"/>
-            </linearGradient>
-          </defs>
-          <rect rx="18" ry="18" width="100" height="100" fill="url(#g1)"/>
-          <text x="50" y="58" text-anchor="middle" font-family="Arial" font-weight="700" font-size="42" fill="#fff">K</text>
-        </svg>
-        <div class="brand">
-          <div class="brand-title">Horarios</div>
-          <div class="brand-sub">Escolares Seguros</div>
-        </div>
-      </div>
-
-      <h2 class="login-title typer" data-text='["Acceso a Horarios","Inicio Seguro","Bienvenido"]'>Acceso a Horarios</h2>
-      <div id="error-message" class="error-message" style="display:none;"></div>
-
-      <!-- NOTE: on traite tout côté JS ici (client-side check via hashes) -->
-      <form id="login-form" autocomplete="off" class="form-compact" novalidate>
-        <div class="form-group">
-          <input type="text" id="full-name" class="form-control" placeholder="Nombre completo" required />
-        </div>
-        <div class="form-group">
-          <input type="password" id="password" class="form-control" placeholder="Contraseña" required />
-        </div>
-        <button id="login-btn" class="btn btn-primary" type="submit">Iniciar Sesión</button>
+  <!-- Login -->
+  <section id="login">
+    <div class="card">
+      <h1>Acceso a Horarios</h1>
+      <form id="login-form">
+        <input type="text" id="name" placeholder="Nombre completo" required />
+        <button type="submit">Entrar</button>
       </form>
-
-      <small class="legal">Acceso seguro — los secretos no aparecen en el HTML.</small>
+      <p class="note">Introduce tu nombre para acceder</p>
     </div>
-  </div>
+  </section>
 
-  <!-- MAIN APP -->
-  <div id="main-app" class="container animate-in" style="display:none;">
-    <header class="header">
-      <div class="brand-left">
-        <svg id="site-logo-sm" viewBox="0 0 100 100" width="42" height="42" aria-hidden="true">
-          <rect rx="14" ry="14" width="100" height="100" fill="url(#g1)"></rect>
-          <text x="50" y="58" text-anchor="middle" font-family="Arial" font-weight="700" font-size="42" fill="#fff">K</text>
-        </svg>
-        <div class="app-title">
-          <div id="app-title" class="typer" data-text='["Horarios Escolares","Mi calendario","Modo Sudo"]'>Horarios Escolares</div>
-          <div class="app-sub">Organiza y protege tus clases.</div>
-        </div>
-        <span id="sudo-badge" class="sudo-badge hidden"># sudo</span>
-      </div>
-
-      <div class="controls">
-        <select id="theme-selector" class="theme-selector" title="Tema">
-          <option value="glassmorphism">Glass</option>
-          <option value="light">Claro</option>
-          <option value="dark">Oscuro</option>
-          <option value="hacker">Hacker</option>
-        </select>
-        <button id="logout-btn" class="btn logout-btn">Cerrar Sesión</button>
-      </div>
+  <!-- Main -->
+  <section id="app" class="hidden">
+    <header>
+      <h1 id="title">Horarios Escolares</h1>
+      <span id="sudo" class="hidden"># sudo</span>
+      <button id="logout">Cerrar Sesión</button>
     </header>
 
-    <!-- HORARIO PRINCIPAL -->
-    <section class="schedule-area">
-      <div class="schedule-container elevated-card" data-scroll>
-        <h2 class="schedule-title">Horario de Clases</h2>
-        <div class="table-wrapper three-d" data-3d>
-          <table id="class-table" class="fancy-table" aria-describedby="class-table-desc">
-            <caption id="class-table-desc" class="visually-hidden">Horario semanal de asignaturas</caption>
-            <thead>
-              <tr>
-                <th>Asignatura</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Matemáticas</td><td>Álgebra</td><td>Geometría</td><td>Álgebra</td><td>Geometría</td><td>Estadística</td></tr>
-              <tr><td>Ciencias</td><td>Biología</td><td>Química</td><td>Física</td><td>Biología</td><td>Laboratorio</td></tr>
-              <tr><td>Lenguas</td><td>Inglés</td><td>Español</td><td>Inglés</td><td>Francés</td><td>Lectura</td></tr>
-              <tr><td>Arte & Música</td><td>Música</td><td>Artes Plásticas</td><td>Teatro</td><td>Música</td><td>Libre</td></tr>
-            </tbody>
-          </table>
-        </div>
+    <main>
+      <div class="card">
+        <h2>Horario de Clases</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Asignatura</th>
+              <th>Lunes</th>
+              <th>Martes</th>
+              <th>Miércoles</th>
+              <th>Jueves</th>
+              <th>Viernes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Matemáticas</td><td>Álgebra</td><td>Geometría</td><td>Álgebra</td><td>Geometría</td><td>Estadística</td></tr>
+            <tr><td>Ciencias</td><td>Biología</td><td>Química</td><td>Física</td><td>Biología</td><td>Laboratorio</td></tr>
+            <tr><td>Lenguas</td><td>Inglés</td><td>Español</td><td>Inglés</td><td>Francés</td><td>Lectura</td></tr>
+            <tr><td>Arte & Música</td><td>Música</td><td>Artes</td><td>Teatro</td><td>Música</td><td>Libre</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- PAUSAS / ALMUERZO / BAÑO -->
-      <div class="schedule-container elevated-card" data-scroll>
-        <h2 class="schedule-title">Horarios de Recreos, Almuerzo e Idas al Baño</h2>
-        <div class="table-wrapper three-d" data-3d>
-          <table id="break-table" class="fancy-table" aria-describedby="break-table-desc">
-            <caption id="break-table-desc" class="visually-hidden">Horarios de recreo, almuerzo y baño por cursos</caption>
-            <thead>
-              <tr>
-                <th>Cursos</th>
-                <th>Hora Recreo 1</th>
-                <th>Ida al Baño 1</th>
-                <th>Almuerzo</th>
-                <th>Hora Recreo 2 / Cafetería</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Nivel Inicial</strong></td>
-                <td>8:40 - 9:00</td>
-                <td>8:40 - 9:00</td>
-                <td>11:30 - 11:50</td>
-                <td>11:30 - 12:00</td>
-              </tr>
-              <tr>
-                <td><strong>1°, 2°, 3°</strong></td>
-                <td>8:00 - 8:20</td>
-                <td>8:40 - 9:00</td>
-                <td>11:30 - 11:50</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <td><strong>4° & 5°</strong></td>
-                <td>8:10 - 8:20</td>
-                <td>9:00 - 9:10</td>
-                <td>11:50 - 12:10</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <td><strong>Secundaria</strong></td>
-                <td>8:30 - 8:40</td>
-                <td>9:00 - 9:20</td>
-                <td>12:00 - 12:20</td>
-                <td>-</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="card">
+        <h2>Recreos y Almuerzo</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Cursos</th>
+              <th>Recreo 1</th>
+              <th>Baño</th>
+              <th>Almuerzo</th>
+              <th>Recreo 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Inicial</td><td>8:40 - 9:00</td><td>8:40 - 9:00</td><td>11:30 - 11:50</td><td>11:30 - 12:00</td></tr>
+            <tr><td>1° - 3°</td><td>8:00 - 8:20</td><td>8:40 - 9:00</td><td>11:30 - 11:50</td><td>-</td></tr>
+            <tr><td>4° - 5°</td><td>8:10 - 8:20</td><td>9:00 - 9:10</td><td>11:50 - 12:10</td><td>-</td></tr>
+            <tr><td>Secundaria</td><td>8:30 - 8:40</td><td>9:00 - 9:20</td><td>12:00 - 12:20</td><td>-</td></tr>
+          </tbody>
+        </table>
       </div>
+    </main>
+  </section>
 
-      <!-- PETITE PREVIEW IFRAME (très petit avec fallback) -->
-      <aside class="portfolio-iframe-wrapper" data-scroll>
-        <div class="small-iframe-card">
-          <a class="iframe-fallback-link" id="preview-link" href="https://badley08.github.io/Karlito" target="_blank" rel="noopener">Abrir vista previa</a>
-          <iframe id="portfolio-iframe"
-                  src="https://badley08.github.io/Karlito"
-                  title="Preview Portfolio"
-                  loading="lazy"
-                  sandbox="allow-same-origin allow-scripts allow-popups"
-                  aria-hidden="false"></iframe>
-        </div>
-      </aside>
-    </section>
+  <div id="toast"></div>
 
-    <footer class="footer">
-      <p>Creado por <a href="https://badley08.github.io/Karlito" target="_blank" rel="noopener">Karlito</a></p>
-    </footer>
-  </div>
-
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
